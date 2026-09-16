@@ -2,6 +2,7 @@ package com.justintywater.api;
 import java.util.Scanner;
 import com.justintywater.service.UserService;
 import com.justintywater.domain.exception.LoginException;
+import com.justintywater.domain.exception.AccountCreationException;
 
 public class BankRepl {
     private final UserService service;
@@ -55,14 +56,14 @@ public class BankRepl {
         System.out.println("  login\n  logout\n  signup\n  balance\n  transfer\n  deposit\n  withdraw\n  history\n  exit");
     }
 
-    private void login(){
+    private void login(){ // TODO: generate actual session token from repo
         String acc = readString("Account ID: ");
         String pin = readString("Pin: ");
 
         try {
             this.sessionToken = service.login(acc, pin);
             this.user = acc;
-            System.out.println("Login successful. Welcome back, " + acc + ".");
+            System.out.println("Logged in as " + acc + ".");
 
         } catch (LoginException e){
             System.out.println("Error: " + e.getMessage());
@@ -78,7 +79,14 @@ public class BankRepl {
     }
 
     private void signup(){
-
+        String acc = readString("Choose an account ID (alphanumeric, 1-12 characters): ");
+        String pin = readString("Choose a pin (numeric, 4 digits): ");
+        try {
+            service.signup(acc, pin);
+            System.out.println("Account created! Please log in using your new credentials.");
+        } catch (AccountCreationException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void balance(){
