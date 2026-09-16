@@ -6,8 +6,11 @@ public class UserRepositoryImpl implements UserRepository {
     public void addUser(String accountId, String pin){
 
     };
-    public void login(String accountId, String pin){
-        
+    public String login(String accountId, String pin){
+        // search for row with username and password
+        // if found, update sessionToken column with UUID
+        // return that UUID
+        return "1234";
     };
     public double checkBalance(String accountId, String pin){
         return 0.0; //placeholder

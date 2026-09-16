@@ -1,10 +1,14 @@
 package com.justintywater.api;
 import java.util.Scanner;
 import com.justintywater.service.UserService;
+import com.justintywater.domain.exception.LoginException;
 
 public class BankRepl {
     private final UserService service;
     private final Scanner scanner = new Scanner(System.in);
+
+    private String sessionToken;
+    private String user;
 
     public BankRepl(UserService service){
         this.service = service;
@@ -17,8 +21,7 @@ public class BankRepl {
         System.out.println("Type 'help' for list of commands");
 
         while (true){
-            System.out.print(">");
-            String command = scanner.nextLine().trim();
+            String command = readString("> ");
 
             if (command.equals("exit")) {
                 return;
@@ -32,16 +35,75 @@ public class BankRepl {
         }
     }
 
-    private void handle(String command) {
+    private void handle(String command){
         switch (command) {
             case "help" -> printHelp();
-            default -> System.out.println("Unknown command");
+            case "login" -> login();
+            case "logout" -> logout();
+            case "signup" -> signup();
+            case "balance" -> balance();
+            case "transfer" -> transfer();
+            case "deposit" -> deposit();
+            case "withdraw" -> withdraw();
+            case "history" -> history();
+            default -> throw new IllegalArgumentException("Invalid command.");
         }
     }
 
     private void printHelp(){
         System.out.println("Commands:");
         System.out.println("  login\n  logout\n  signup\n  balance\n  transfer\n  deposit\n  withdraw\n  history\n  exit");
+    }
+
+    private void login(){
+        String acc = readString("Account ID: ");
+        String pin = readString("Pin: ");
+
+        try {
+            this.sessionToken = service.login(acc, pin);
+            this.user = acc;
+            System.out.println("Login successful. Welcome back, " + acc + ".");
+
+        } catch (LoginException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void logout(){
+        if (this.sessionToken != null){
+            service.logout(user, sessionToken);
+        } else {
+            System.out.println("You cannot log out because you are not logged in.");
+        }
+    }
+
+    private void signup(){
+
+    }
+
+    private void balance(){
+
+    }
+
+    private void transfer(){
+
+    }
+
+    private void deposit(){
+
+    }
+
+    private void withdraw(){
+
+    }
+
+    private void history(){
+
+    }
+
+    private String readString(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
     }
 
     private int readInt(String prompt) {
