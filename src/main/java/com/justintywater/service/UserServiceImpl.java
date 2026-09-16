@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(String accountId, String pin){
         //TODO: if user exists, return error
-        //TODO: repo function to actually add user
         StringBuffer errorString = new StringBuffer();
         if (accountId.length() > 12 || accountId.length() < 1){
             errorString.append("\n- Account ID must be between 1 and 12 characters");
