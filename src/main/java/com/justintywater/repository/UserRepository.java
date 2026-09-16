@@ -5,7 +5,7 @@ import com.justintywater.domain.Transaction;
 public interface UserRepository {
     void addUser(String accountId, String pin);
     String login(String accountId, String pin);
-    String logout(String accountId, String pin);
+    void logout(String accountId, String pin);
     double checkBalance(String accountId, String pin);
     void deposit(String accountId, String pin, double amount);
     void withdraw(String accountId, String pin, double amount);

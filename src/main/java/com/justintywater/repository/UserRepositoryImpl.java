@@ -12,6 +12,9 @@ public class UserRepositoryImpl implements UserRepository {
         // return that UUID
         return "1234";
     };
+    public void logout(String accountId, String pin){
+        
+    };
     public double checkBalance(String accountId, String pin){
         return 0.0; //placeholder
     };

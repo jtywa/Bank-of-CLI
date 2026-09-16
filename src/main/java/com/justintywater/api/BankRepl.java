@@ -79,6 +79,8 @@ public class BankRepl {
     private void logout(){
         if (this.sessionToken != null){
             service.logout(user, sessionToken);
+            user = null;
+            sessionToken = null;
         } else {
             System.out.println("You cannot log out because you are not logged in.");
         }
@@ -143,11 +145,6 @@ public class BankRepl {
     private String readString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
-    }
-
-    private int readInt(String prompt) {
-        System.out.print(prompt);
-        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     private double readDouble(String prompt) {

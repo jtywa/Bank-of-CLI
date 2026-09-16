@@ -1,6 +1,4 @@
 package com.justintywater.service;
-import javax.naming.AuthenticationException;
-
 import com.justintywater.domain.Transaction;
 import com.justintywater.domain.exception.AccountCreationException;
 import com.justintywater.domain.exception.LoginException;
@@ -8,6 +6,9 @@ import com.justintywater.repository.UserRepository;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository repo;
+    private final int MAX_ID_LENGTH = 12;
+    private final int MIN_ID_LENGTH = 3;
+    private final int PIN_LENGTH = 4;
 
     public UserServiceImpl(UserRepository repo){
         this.repo = repo;
@@ -29,13 +30,13 @@ public class UserServiceImpl implements UserService {
     public void addUser(String accountId, String pin){
         //TODO: if user exists, return error
         StringBuffer errorString = new StringBuffer();
-        if (accountId.length() > 12 || accountId.length() < 1){
-            errorString.append("\n- Account ID must be between 1 and 12 characters");
+        if (!isValidLength(accountId)){
+            errorString.append("\n- Account ID must be between 3 and 12 characters");
         }
         if (!accountId.matches("^[a-zA-Z0-9]+$")){
             errorString.append("\n- Account ID must be alphanumeric");
         }
-        if (pin.length() != 4){
+        if (pin.length() != PIN_LENGTH){
             errorString.append("\n- Pin must be four digits");
         }
         if (!pin.matches("\\d+")){
@@ -78,4 +79,13 @@ public class UserServiceImpl implements UserService {
     public Transaction[] getHistory(String accountId, String session){
         return new Transaction[] {}; //placeholder
     };
+
+    //---------------------
+    // Helper Methods
+    //---------------------
+
+    private boolean isValidLength(String acc){
+        int length = acc.length();
+        return (length > MAX_ID_LENGTH || length < MIN_ID_LENGTH);
+    }
 }
