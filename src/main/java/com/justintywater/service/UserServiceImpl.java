@@ -53,35 +53,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public double checkBalance(String accountId, String session) {
+    public double checkBalance(String accountId, String pin) {
         // TODO: currently assumes successful lookup
-        return repo.checkBalance(accountId, session);
+        return repo.checkBalance(accountId, pin);
     };
 
     @Override
-    public void deposit(String accountId, String session, double amount) {
+    public double deposit(String accountId, String pin, double amount) {
         if (amount > 0)
-            repo.deposit(accountId, session, amount);
+            return repo.deposit(accountId, pin, amount);
         else
             throw new IllegalArgumentException("Deposit amount must be positive");
     };
 
     @Override
-    public void withdraw(String accountId, String session, double amount) {
-        double balance = repo.checkBalance(accountId, session);
+    public void withdraw(String accountId, String pin, double amount) {
+        double balance = repo.checkBalance(accountId, pin);
         if (amount < balance) {
-            repo.withdraw(accountId, session, amount);
+            repo.withdraw(accountId, pin, amount);
         } else
             throw new IllegalArgumentException("Requested withdrawal amount exceeds available funds.");
     };
 
     @Override
-    public void transfer(String accountId, String session, double amount, String recipientAccountId) {
+    public void transfer(String accountId, String pin, double amount, String recipientAccountId) {
 
     };
 
     @Override
-    public Transaction[] getHistory(String accountId, String session) {
+    public Transaction[] getHistory(String accountId, String pin) {
         return new Transaction[] {}; // placeholder
     };
 

@@ -5,17 +5,17 @@ import com.justintywater.domain.Transaction;
 public interface UserService {
     boolean login(String accountId, String pin);
 
-    void logout(String accountId, String session);
+    void logout(String accountId, String pin);
 
     void addUser(String accountId, String pin);
 
-    double checkBalance(String accountId, String session);
+    double checkBalance(String accountId, String pin);
 
-    void deposit(String accountId, String session, double amount);
+    double deposit(String accountId, String pin, double amount);
 
-    void withdraw(String accountId, String session, double amount);
+    void withdraw(String accountId, String pin, double amount);
 
-    void transfer(String accountId, String session, double amount, String recipientAccountId);
+    void transfer(String accountId, String pin, double amount, String recipientAccountId);
 
-    Transaction[] getHistory(String accountId, String session);
+    Transaction[] getHistory(String accountId, String pin);
 }

@@ -92,7 +92,7 @@ public class BankRepl {
             this.pin = null;
             System.out.println("Logged out.");
         } else {
-            System.out.println("Can't logged out. Not logged in.");
+            printError("Must be logged in to log out.");
         }
     }
 
@@ -108,7 +108,11 @@ public class BankRepl {
     }
 
     private void balance() {
-        System.out.println(service.checkBalance(user, pin));
+        if (!loggedIn()){
+            printError("Must be logged in to view balance.");
+        } else {
+            System.out.printf("Balance: $%.2f%n", service.checkBalance(user, pin));
+        } 
     }
 
     private void transfer() {
@@ -122,9 +126,13 @@ public class BankRepl {
     }
 
     private void deposit() {
+        if (!loggedIn()){
+            printError("Must be logged in to make a deposit.");
+        }
         double amount = readDouble("Enter amount to deposit: ");
         try {
-            service.deposit(user, pin, amount);
+            double newBalance = service.deposit(user, pin, amount);
+            System.out.printf("Deposit successful. New balance: $%.2f%n", newBalance);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }

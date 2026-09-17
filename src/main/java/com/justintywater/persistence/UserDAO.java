@@ -7,11 +7,11 @@ public interface UserDAO {
 
     boolean login(String accountId, String pin);
 
-    void logout(String accountId, String sessionToken);
+    void logout(String accountId, String pin);
 
     double checkBalance(String accountId, String pin);
 
-    void deposit(String accountId, String pin, double amount);
+    double deposit(String accountId, String pin, double amount);
 
     void withdraw(String accountId, String pin, double amount);
 
