@@ -3,6 +3,9 @@ package com.justintywater.persistence;
 import com.justintywater.domain.Transaction;
 
 public interface UserDAO {
+
+    boolean userExists(String accountId);
+
     void addUser(String accountId, String pin);
 
     boolean login(String accountId, String pin);
@@ -13,7 +16,7 @@ public interface UserDAO {
 
     double deposit(String accountId, String pin, double amount);
 
-    void withdraw(String accountId, String pin, double amount);
+    double withdraw(String accountId, String pin, double amount);
 
     void transfer(String accountId, String pin, double amount, String recipientAccountId);
 

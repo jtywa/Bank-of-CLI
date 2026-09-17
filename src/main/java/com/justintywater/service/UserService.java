@@ -13,7 +13,7 @@ public interface UserService {
 
     double deposit(String accountId, String pin, double amount);
 
-    void withdraw(String accountId, String pin, double amount);
+    double withdraw(String accountId, String pin, double amount);
 
     void transfer(String accountId, String pin, double amount, String recipientAccountId);
 

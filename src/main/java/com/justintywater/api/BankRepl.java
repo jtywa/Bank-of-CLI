@@ -120,6 +120,7 @@ public class BankRepl {
         double amount = readDouble("Enter amount to transfer: ");
         try {
             service.transfer(user, pin, amount, recipient);
+            System.out.printf("Successfully transfered $%.2f to %s.%n", amount, recipient);
         } catch (TransferException e) {
             printError(e.getMessage());
         }
@@ -128,20 +129,26 @@ public class BankRepl {
     private void deposit() {
         if (!loggedIn()){
             printError("Must be logged in to make a deposit.");
+            return;
         }
         double amount = readDouble("Enter amount to deposit: ");
         try {
             double newBalance = service.deposit(user, pin, amount);
-            System.out.printf("Deposit successful. New balance: $%.2f%n", newBalance);
+            System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }
     }
 
     private void withdraw() {
+        if (!loggedIn()){
+            printError("Must be logged in to make a withdrawal.");
+            return;
+        }
         double amount = readDouble("Enter amount to withdraw: ");
         try {
-            service.withdraw(user, pin, amount);
+            double newBalance = service.withdraw(user, pin, amount);
+            System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }

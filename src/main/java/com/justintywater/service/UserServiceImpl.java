@@ -3,6 +3,7 @@ package com.justintywater.service;
 import com.justintywater.domain.Transaction;
 import com.justintywater.domain.exception.AccountCreationException;
 import com.justintywater.domain.exception.LoginException;
+import com.justintywater.domain.exception.TransferException;
 import com.justintywater.persistence.UserDAO;
 
 public class UserServiceImpl implements UserService {
@@ -67,17 +68,24 @@ public class UserServiceImpl implements UserService {
     };
 
     @Override
-    public void withdraw(String accountId, String pin, double amount) {
+    public double withdraw(String accountId, String pin, double amount) {
         double balance = repo.checkBalance(accountId, pin);
         if (amount < balance) {
-            repo.withdraw(accountId, pin, amount);
+            return repo.withdraw(accountId, pin, amount);
         } else
             throw new IllegalArgumentException("Requested withdrawal amount exceeds available funds.");
     };
 
     @Override
     public void transfer(String accountId, String pin, double amount, String recipientAccountId) {
-
+        double balance = repo.checkBalance(accountId, pin);
+        if (!repo.userExists(recipientAccountId)){
+            throw new TransferException("The account you would like to transfer to does not exist.");
+        }
+        if (amount > balance){
+            throw new TransferException("Insufficient funds for this transfer.");
+        }
+        repo.transfer(accountId, pin, amount, recipientAccountId);
     };
 
     @Override
