@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 return true;
             }
             else
-                logger.error("User attempted to sign in with invalid credentials.");
+                logger.warn("User attempted to sign in with invalid credentials.");
                 throw new LoginException("Invalid credentials.");
             }
         catch (ConnectionException e) {
@@ -50,19 +50,19 @@ public class UserServiceImpl implements UserService {
         StringBuffer errorString = new StringBuffer();
         if (!isValidLength(accountId)) {
             errorString.append("\n- Account ID must be between 3 and 12 characters");
-            logger.error("User attempted to create an account with invalid account ID.");
+            logger.warn("User attempted to create an account with invalid account ID.");
         }
         if (!accountId.matches("^[a-zA-Z0-9]+$")) {
             errorString.append("\n- Account ID must be alphanumeric");
-            logger.error("User attempted to create an account with invalid account ID.");
+            logger.warn("User attempted to create an account with invalid account ID.");
         }
         if (pin.length() != PIN_LENGTH) {
             errorString.append("\n- Pin must be four digits");
-            logger.error("User attempted to create an account with invalid pin.");
+            logger.warn("User attempted to create an account with invalid pin.");
         }
         if (!pin.matches("\\d+")) {
             errorString.append("\n- Pin must be numeric");
-            logger.error("User attempted to create an account with invalid pin.");
+            logger.warn("User attempted to create an account with invalid pin.");
         }
         if (errorString.length() > 0) {
             throw new AccountCreationException("Invalid Format" + errorString);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
             logger.info("User {} deposited ${} to their account.", accountId, amount);
             return repo.deposit(accountId, pin, amount);
         } else
-            logger.error("User {} attempted to deposit ${} to their account. Transaction cancelled.", accountId,
+            logger.warn("User {} attempted to deposit ${} to their account. Transaction cancelled.", accountId,
                     amount);
         throw new IllegalArgumentException("Deposit amount must be positive");
     };
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
             logger.info("User {} withdrew ${} from their account.", accountId, amount);
             return repo.withdraw(accountId, pin, amount);
         } else
-            logger.error(
+            logger.warn(
                     "User {} attempted to withdraw ${} from their account, but had insufficient funds. Transaction cancelled.",
                     accountId, amount);
         throw new IllegalArgumentException("Requested withdrawal amount exceeds available funds.");
@@ -107,12 +107,12 @@ public class UserServiceImpl implements UserService {
     public void transfer(String accountId, String pin, double amount, String recipientAccountId) {
         double balance = repo.checkBalance(accountId, pin);
         if (!repo.userExists(recipientAccountId)) {
-            logger.error("User {} attempted to transfer ${} to an account which does not exist. Transaction cancelled.",
+            logger.warn("User {} attempted to transfer ${} to an account which does not exist. Transaction cancelled.",
                     accountId, amount);
             throw new TransferException("The account you would like to transfer to does not exist.");
         }
         if (amount > balance) {
-            logger.error("User {} attempted to transfer ${}, but had insufficient funds. Transaction cancelled.",
+            logger.warn("User {} attempted to transfer ${}, but had insufficient funds. Transaction cancelled.",
                     accountId, amount);
             throw new TransferException("Insufficient funds for this transfer.");
         }
