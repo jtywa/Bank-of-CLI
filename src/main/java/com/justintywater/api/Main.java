@@ -5,7 +5,7 @@ import com.justintywater.service.UserService;
 import com.justintywater.service.UserServiceImpl;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         UserDAO repo = new UserDAOImpl();
         UserService service = new UserServiceImpl(repo);
         new BankRepl(service).run();
