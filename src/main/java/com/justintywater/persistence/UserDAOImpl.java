@@ -8,6 +8,7 @@ import com.justintywater.domain.Transaction;
 import com.justintywater.domain.exception.LoginException;
 import com.justintywater.domain.exception.TransferException;
 import com.justintywater.domain.exception.AccountCreationException;
+import com.justintywater.domain.exception.ConnectionException;
 
 public class UserDAOImpl implements UserDAO {
     private static final String INSERT_SQL = "INSERT INTO bank.accounts (accountId, pin) VALUES (?, ?)";
@@ -71,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
-            throw new LoginException(e.getMessage());
+            throw new ConnectionException("Could not connect to the database.");
         }
     };
 
