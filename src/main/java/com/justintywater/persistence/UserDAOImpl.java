@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.justintywater.domain.Transaction;
 import com.justintywater.domain.exception.TransferException;
+import com.justintywater.service.UserServiceImpl;
 import com.justintywater.domain.exception.AccountCreationException;
 import com.justintywater.domain.exception.ConnectionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserDAOImpl implements UserDAO {
     private static final String INSERT_SQL = "INSERT INTO bank.accounts (accountId, pin) VALUES (?, ?)";
@@ -18,6 +21,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String WITHDRAW_SQL = "UPDATE bank.accounts SET balance = balance - ? WHERE accountId = ? AND pin = ? RETURNING balance";
     private static final String CREDIT_SQL = "UPDATE bank.accounts SET balance = balance + ? WHERE accountId = ?";
     private static final String DEBIT_SQL = "UPDATE bank.accounts SET balance = balance - ? WHERE accountId = ? AND pin = ?";
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public boolean userExists(String accountId) {
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
@@ -70,6 +74,7 @@ public class UserDAOImpl implements UserDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
+            logger.error("User {} failed to connect to the database.", accountId);
             throw new ConnectionException("Could not connect to the database.");
         }
     };
