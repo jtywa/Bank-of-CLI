@@ -34,3 +34,10 @@ The user may also be prompted to provide inputs such as username, password, tran
 ---
 - SLF4J
 - Service-layer logging for all events (user actions, errors, warnings)
+
+#### Features
+---
+- Multi-layer input validation
+- Custom Exceptions to handle unexpected system events
+- Helpful responses to user actions
+- Color-coded terminal output for clarity

@@ -1,0 +1,6 @@
+2026-09-25 11:33:25 INFO  [main] c.j.service.UserServiceImpl - User jtywa logged in.
+2026-09-25 11:33:27 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their account balance.
+2026-09-25 11:33:30 INFO  [main] c.j.service.UserServiceImpl - User jtywa withdrew $90.0 from their account.
+2026-09-25 11:33:35 INFO  [main] c.j.service.UserServiceImpl - User jtywa deposited $1000.0 to their account.
+2026-09-25 11:33:40 INFO  [main] c.j.service.UserServiceImpl - User jtywa transferred $200.0 to user ajan
+2026-09-25 11:33:45 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their transaction history.
