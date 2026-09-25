@@ -139,6 +139,7 @@ public class BankRepl {
         try {
             double newBalance = userService.deposit(user, pin, amount);
             System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
+            transactionService.addTransaction(null, "Deposit", amount, user);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }
@@ -153,6 +154,7 @@ public class BankRepl {
         try {
             double newBalance = userService.withdraw(user, pin, amount);
             System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
+            transactionService.addTransaction(user, "Withdrawal", amount, null);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }
@@ -165,11 +167,16 @@ public class BankRepl {
             return;
         }
         for (Transaction t : list) {
-            System.out.print(t.getType() + " of amount " + t.getAmount() + " ");
+            System.out.print(t.getTimestamp() + " -- ");
+            System.out.print(t.getType());
+            System.out.printf(" of amount $%.2f", t.getAmount());
+            System.out.print(" ");
             if (t.getSender() != null)
                 System.out.print("from " + t.getSender());
             if (t.getRecipient() != null)
                 System.out.print("to " + t.getRecipient());
+
+            System.out.println("");
         }
     }
 

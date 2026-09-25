@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import com.justintywater.domain.Transaction;
 
 public class TransactionDAOImpl implements TransactionDAO {
-    private static final String ADD_TRANSACTION_SQL = "INSERT INTO bank.transactions (sender, type, amount, recipient, timestamp) VALUES (?, ?, ?, ?, ?)";
+    private static final String ADD_TRANSACTION_SQL = "INSERT INTO bank.transactions (sender, transactiontype, amount, recipient, transaction_time) VALUES (?, ?, ?, ?, ?)";
     private static final String HISTORY_SQL = """
-            SELECT t.transactionType, t.sender, t.recipient, t.amount, t.timestamp \
+            SELECT t.transactionType, t.sender, t.recipient, t.amount, t.transaction_time \
             FROM bank.transactions t \
             INNER JOIN bank.accounts a \
             ON (a.accountId = t.sender OR a.accountId = t.recipient) \
             WHERE a.accountId = ? AND a.pin = ? \
-            ORDER BY t.timestamp DESC \
+            ORDER BY t.transaction_time DESC \
             LIMIT 10 \
             """;
 
@@ -52,11 +52,11 @@ public class TransactionDAOImpl implements TransactionDAO {
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     Transaction t = new Transaction();
-                    t.setType(rs.getString("transactionType"));
+                    t.setType(rs.getString("transactiontype"));
                     t.setSender(rs.getString("sender"));
                     t.setRecipient(rs.getString("recipient"));
                     t.setAmount(rs.getDouble("amount"));
-                    t.setTimestamp(rs.getTimestamp("timestamp"));
+                    t.setTimestamp(rs.getTimestamp("transaction_time"));
 
                     transactionList.add(t);
                 }
