@@ -1,7 +1,5 @@
 package com.justintywater.persistence;
 
-import com.justintywater.domain.Transaction;
-
 public interface UserDAO {
 
     boolean userExists(String accountId);
@@ -20,5 +18,4 @@ public interface UserDAO {
 
     void transfer(String accountId, String pin, double amount, String recipientAccountId);
 
-    Transaction[] getHistory(String accountId, String pin);
 }

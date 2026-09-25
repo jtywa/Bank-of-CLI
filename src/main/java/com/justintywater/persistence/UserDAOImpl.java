@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.justintywater.domain.Transaction;
-import com.justintywater.domain.exception.LoginException;
 import com.justintywater.domain.exception.TransferException;
 import com.justintywater.domain.exception.AccountCreationException;
 import com.justintywater.domain.exception.ConnectionException;
@@ -19,7 +18,6 @@ public class UserDAOImpl implements UserDAO {
     private static final String WITHDRAW_SQL = "UPDATE bank.accounts SET balance = balance - ? WHERE accountId = ? AND pin = ? RETURNING balance";
     private static final String CREDIT_SQL = "UPDATE bank.accounts SET balance = balance + ? WHERE accountId = ?";
     private static final String DEBIT_SQL = "UPDATE bank.accounts SET balance = balance - ? WHERE accountId = ? AND pin = ?";
-    private static final String HISTORY_SQL = "SELECT t.transactionType, t.sender, t.recipient, t.amount FROM bank.transactions t INNER JOIN bank.accounts a ON (a.accountId = t.sender OR a.accountId = t.recipient) WHERE a.accountId = ? AND a.pin = ?";
 
     public boolean userExists(String accountId) {
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
@@ -135,9 +133,8 @@ public class UserDAOImpl implements UserDAO {
 
     public void transfer(String accountId, String pin, double amount, String recipientAccountId) {
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection();
-            PreparedStatement debit = connection.prepareStatement(DEBIT_SQL);
-            PreparedStatement credit = connection.prepareStatement(CREDIT_SQL);) 
-        {
+                PreparedStatement debit = connection.prepareStatement(DEBIT_SQL);
+                PreparedStatement credit = connection.prepareStatement(CREDIT_SQL);) {
             connection.setAutoCommit(false);
 
             try {
@@ -145,14 +142,14 @@ public class UserDAOImpl implements UserDAO {
                 debit.setString(2, accountId);
                 debit.setString(3, pin);
 
-                if (debit.executeUpdate() != 1){
+                if (debit.executeUpdate() != 1) {
                     throw new SQLException("Debit failed.");
                 }
 
                 credit.setDouble(1, amount);
                 credit.setString(2, recipientAccountId);
 
-                if (credit.executeUpdate() != 1){
+                if (credit.executeUpdate() != 1) {
                     throw new SQLException("Credit failed.");
                 }
 
@@ -165,7 +162,7 @@ public class UserDAOImpl implements UserDAO {
                 }
                 throw new TransferException(e.getMessage());
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new TransferException("Failed to connect.");
         }
     };

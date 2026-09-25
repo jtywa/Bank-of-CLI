@@ -1,7 +1,5 @@
 package com.justintywater.service;
 
-import com.justintywater.domain.Transaction;
-
 public interface UserService {
     boolean login(String accountId, String pin);
 
@@ -17,5 +15,4 @@ public interface UserService {
 
     void transfer(String accountId, String pin, double amount, String recipientAccountId);
 
-    Transaction[] getHistory(String accountId, String pin);
 }

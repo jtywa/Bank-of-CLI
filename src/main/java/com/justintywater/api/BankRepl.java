@@ -1,21 +1,25 @@
 package com.justintywater.api;
 
+import java.util.List;
 import java.util.Scanner;
 import com.justintywater.service.UserService;
 import com.justintywater.domain.exception.LoginException;
 import com.justintywater.domain.Transaction;
 import com.justintywater.domain.exception.AccountCreationException;
 import com.justintywater.domain.exception.TransferException;
+import com.justintywater.service.TransactionService;
 
 public class BankRepl {
-    private final UserService service;
+    private final UserService userService;
+    private final TransactionService transactionService;
     private final Scanner scanner = new Scanner(System.in);
 
     private String pin;
     private String user;
 
-    public BankRepl(UserService service) {
-        this.service = service;
+    public BankRepl(UserService userService, TransactionService transactionService) {
+        this.userService = userService;
+        this.transactionService = transactionService;
     }
 
     public void run() {
@@ -74,7 +78,7 @@ public class BankRepl {
         String pin = readString("Pin: ");
 
         try {
-            boolean loggedIn = service.login(acc, pin);
+            boolean loggedIn = userService.login(acc, pin);
             if (loggedIn) {
                 this.user = acc;
                 this.pin = pin;
@@ -100,7 +104,7 @@ public class BankRepl {
         String acc = readString("Choose an account ID (alphanumeric, 1-12 characters): ");
         String pin = readString("Choose a pin (numeric, 4 digits): ");
         try {
-            service.addUser(acc, pin);
+            userService.addUser(acc, pin);
             System.out.println("Account created! Please log in using your new credentials.");
         } catch (AccountCreationException e) {
             printError(e.getMessage());
@@ -108,18 +112,18 @@ public class BankRepl {
     }
 
     private void balance() {
-        if (!loggedIn()){
+        if (!loggedIn()) {
             printError("Must be logged in to view balance.");
         } else {
-            System.out.printf("Balance: $%.2f%n", service.checkBalance(user, pin));
-        } 
+            System.out.printf("Balance: $%.2f%n", userService.checkBalance(user, pin));
+        }
     }
 
     private void transfer() {
         String recipient = readString("Enter account to transfer to: ");
         double amount = readDouble("Enter amount to transfer: ");
         try {
-            service.transfer(user, pin, amount, recipient);
+            userService.transfer(user, pin, amount, recipient);
             System.out.printf("Successfully transfered $%.2f to %s.%n", amount, recipient);
         } catch (TransferException e) {
             printError(e.getMessage());
@@ -127,13 +131,13 @@ public class BankRepl {
     }
 
     private void deposit() {
-        if (!loggedIn()){
+        if (!loggedIn()) {
             printError("Must be logged in to make a deposit.");
             return;
         }
         double amount = readDouble("Enter amount to deposit: ");
         try {
-            double newBalance = service.deposit(user, pin, amount);
+            double newBalance = userService.deposit(user, pin, amount);
             System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
@@ -141,13 +145,13 @@ public class BankRepl {
     }
 
     private void withdraw() {
-        if (!loggedIn()){
+        if (!loggedIn()) {
             printError("Must be logged in to make a withdrawal.");
             return;
         }
         double amount = readDouble("Enter amount to withdraw: ");
         try {
-            double newBalance = service.withdraw(user, pin, amount);
+            double newBalance = userService.withdraw(user, pin, amount);
             System.out.printf("Successfully deposited $%.2f. New balance: $%.2f%n", amount, newBalance);
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
@@ -155,9 +159,13 @@ public class BankRepl {
     }
 
     private void history() {
-        Transaction[] list = service.getHistory(user, pin);
+        List<Transaction> list = transactionService.getHistory(user, pin);
+        if (list == null) {
+            System.out.println("No transactions found.");
+            return;
+        }
         for (Transaction t : list) {
-            System.out.println(t.getType() + " of amount " + t.getAmount() + " ");
+            System.out.print(t.getType() + " of amount " + t.getAmount() + " ");
             if (t.getSender() != null)
                 System.out.print("from " + t.getSender());
             if (t.getRecipient() != null)

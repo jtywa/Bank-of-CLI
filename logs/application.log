@@ -10,3 +10,5 @@
 2026-09-24 11:31:08 INFO  [main] c.j.service.UserServiceImpl - User jtywa transferred $20.0 to user ajan
 2026-09-24 11:54:03 WARN  [main] c.j.service.UserServiceImpl - User acc-123 attempted to withdraw $40.0 from their account, but had insufficient funds. Transaction cancelled.
 2026-09-24 11:54:03 INFO  [main] c.j.service.UserServiceImpl - User acc-123 withdrew $40.0 from their account.
+2026-09-24 22:51:46 INFO  [main] c.j.service.UserServiceImpl - User jtywa logged in.
+2026-09-24 22:51:55 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their account balance.

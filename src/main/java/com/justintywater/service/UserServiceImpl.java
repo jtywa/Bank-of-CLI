@@ -16,7 +16,6 @@ public class UserServiceImpl implements UserService {
     private final int PIN_LENGTH = 4;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-
     public UserServiceImpl(UserDAO repo) {
         this.repo = repo;
     }
@@ -25,15 +24,13 @@ public class UserServiceImpl implements UserService {
     public boolean login(String accountId, String pin) {
         try {
             boolean loggedIn = repo.login(accountId, pin);
-            if (loggedIn){
+            if (loggedIn) {
                 logger.info("User {} logged in.", accountId);
                 return true;
-            }
-            else
+            } else
                 logger.warn("User attempted to sign in with invalid credentials.");
-                throw new LoginException("Invalid credentials.");
-            }
-        catch (ConnectionException e) {
+            throw new LoginException("Invalid credentials.");
+        } catch (ConnectionException e) {
             return false;
         }
     }
@@ -117,13 +114,8 @@ public class UserServiceImpl implements UserService {
             throw new TransferException("Insufficient funds for this transfer.");
         }
         logger.info("User {} transferred ${} to user {}",
-                    accountId, amount, recipientAccountId);
+                accountId, amount, recipientAccountId);
         repo.transfer(accountId, pin, amount, recipientAccountId);
-    };
-
-    @Override
-    public Transaction[] getHistory(String accountId, String pin) {
-        return new Transaction[] {}; // placeholder
     };
 
     // ---------------------
