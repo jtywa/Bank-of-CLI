@@ -38,3 +38,5 @@
 2026-09-25 00:28:19 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their transaction history.
 2026-09-25 00:29:33 INFO  [main] c.j.service.UserServiceImpl - User jtywa logged in.
 2026-09-25 00:29:36 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their transaction history.
+2026-09-25 00:30:50 INFO  [main] c.j.service.UserServiceImpl - User jtywa logged in.
+2026-09-25 00:30:51 INFO  [main] c.j.service.UserServiceImpl - User jtywa checked their transaction history.
